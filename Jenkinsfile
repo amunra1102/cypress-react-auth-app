@@ -1,6 +1,9 @@
 pipeline{
   agent{
-    label "cypress test"
+    docker {
+      image "cypress/base:12"
+      args "-u root:root"
+    }
   }
   stage("Download the dependencies in server"){
     steps{
