@@ -15,8 +15,12 @@
   ],
   "courses": [
     {
-      "name": "hi",
-      "id": 1
+      "name": "React",
+      "id": 3
+    },
+    {
+      "name": "NextJS",
+      "id": 4
     }
   ]
 }

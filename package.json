@@ -6,7 +6,9 @@
     "scripts": {
         "start": "run-p server client",
         "server": "node server.js",
-        "client": "node client.js"
+        "client": "node client.js",
+        "cy:run": "npx cypress run --record --key b42a7e92-3c7b-417e-bb06-731a6343841c",
+        "build:and:test": "start-server-and-test start http://localhost:3000 cy:run"
     },
     "author": "Thanh Van Vu",
     "license": "ISC",

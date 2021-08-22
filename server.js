@@ -35,7 +35,7 @@ server.get('/user_token', (req, res) => {
 
 // Require user to be logged in to hit server routes
 // Make user_token route available to anonymous users
-server.use(jwt({ secret, algorithms: ['RS256'] })
+server.use(jwt({ secret, algorithms: ['HS256'] })
   .unless({
     path: [
       '/user_token'
@@ -55,8 +55,12 @@ server.use((req, res, next) => {
       userHasPermission = false;
     }
   }
-  if (userHasPermission) next();
-  else res.status(403).json({ error: 'No permission' });
+
+  if (userHasPermission) {
+    next();
+  } else {
+    res.status(403).json({ error: 'No permission' });
+  }
 });
 
 // Use default router

@@ -9,115 +9,119 @@ import CoursePage from './components/courses/CoursePage';
 import TopBar from './components/layout/TopBar';
 import PrivateRoute from './components/router/PrivateRoute';
 import RouteWithProps from './components/router/RouteWithProps';
+
 import * as authentication from './services/authentication';
+
 import '../node_modules/picnic/picnic.min.css';
 import './App.css';
 
 class App extends React.Component {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        let authState = authentication.getAuthState();
-        this.state = {
-            auth: {
-                loggedIn: authState.userToken !== null,
-                username: authState.username,
-                userToken: authState.userToken,
-                role: authState.role
-            }
-        };
+    let authState = authentication.getAuthState();
+    this.state = {
+      auth: {
+        loggedIn: authState.userToken !== null,
+        username: authState.username,
+        userToken: authState.userToken,
+        role: authState.role
+      }
+    };
 
-        this.login = this.login.bind(this);
-        this.logout = this.logout.bind(this);
-    }
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
+  }
 
-    getChildContext() {
-        return {
-            auth: {
-                loggedIn: this.state.auth.loggedIn,
-                username: this.state.auth.username,
-                userToken: this.state.auth.userToken,
-                role: this.state.auth.role
-            }
-        };
-    }
+  getChildContext() {
+    return {
+      auth: {
+        loggedIn: this.state.auth.loggedIn,
+        username: this.state.auth.username,
+        userToken: this.state.auth.userToken,
+        role: this.state.auth.role
+      }
+    };
+  }
 
-    login(username, password) {
-        return authentication
-            .login(username, password)
-            .then((result) => {
-                this.setState({
-                    auth: {
-                        ...this.state.auth,
-                        loggedIn: true,
-                        username: result.username,
-                        userToken: result.userToken,
-                        role: result.role
-                    }
-                });
-            })
-            .catch((err) => {
-                this._logout();
-                return Promise.reject(err);
-            });
-    }
-
-    logout() {
-        return authentication.logout().then((result) => {
-            this._logout();
-        });
-    }
-
-    render() {
-        return (
-            <Router>
-                <div>
-                    <TopBar logout={this.logout} />
-                    <div className="mainbody">
-                        <Switch>
-                            <Route path="/" exact component={HomePage} />
-                            <RouteWithProps
-                                path="/login"
-                                component={LoginPage}
-                                props={{ login: this.login }}
-                            />
-                            <RouteWithProps
-                                path="/notloggedin"
-                                component={LoginPage}
-                                props={{ login: this.login }}
-                            />
-                            <PrivateRoute
-                                path="/courses"
-                                component={CoursePage}
-                            />
-                            <Route component={NotFoundPage} />
-                        </Switch>
-                    </div>
-                </div>
-            </Router>
-        );
-    }
-
-    _logout() {
+  login(username, password) {
+    return authentication
+      .login(username, password)
+      .then(result => {
         this.setState({
-            auth: {
-                ...this.state.auth,
-                loggedIn: false,
-                username: null,
-                userToken: null,
-                role: null
-            }
+          auth: {
+            ...this.state.auth,
+            loggedIn: true,
+            username: result.username,
+            userToken: result.userToken,
+            role: result.role
+          }
         });
-    }
+      })
+      .catch(err => {
+        this._logout();
+        return Promise.reject(err);
+      });
+  }
+
+  logout() {
+    return authentication.logout().then(result => {
+      if (result) {
+        this._logout();
+      }
+    });
+  }
+
+  render() {
+    return (
+      <Router>
+        <div>
+          <TopBar logout={this.logout} />
+          <div className="main-body">
+            <Switch>
+              <Route path="/" exact component={HomePage} />
+              <RouteWithProps
+                path="/login"
+                component={LoginPage}
+                props={{ login: this.login }}
+              />
+              <RouteWithProps
+                path="/not-logged-in"
+                component={LoginPage}
+                props={{ login: this.login }}
+              />
+              <PrivateRoute
+                path="/courses"
+                component={CoursePage}
+              />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </div>
+        </div>
+      </Router>
+    );
+  }
+
+  _logout() {
+    this.setState({
+      auth: {
+        ...this.state.auth,
+        loggedIn: false,
+        username: null,
+        userToken: null,
+        role: null
+      }
+    });
+  }
 }
 
 App.childContextTypes = {
-    auth: PropTypes.shape({
-        loggedIn: PropTypes.bool,
-        username: PropTypes.string,
-        userToken: PropTypes.string,
-        role: PropTypes.string
-    })
+  auth: PropTypes.shape({
+    loggedIn: PropTypes.bool,
+    username: PropTypes.string,
+    userToken: PropTypes.string,
+    role: PropTypes.string
+  })
 };
 
 export default App;

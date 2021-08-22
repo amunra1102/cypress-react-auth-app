@@ -7,25 +7,22 @@ import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({ component: Component, ...rest }, context) => (
-    <Route
-        {...rest}
-        render={(props) =>
-            context.auth.loggedIn ? (
-                <Component {...props} />
-            ) : (
-                <Redirect
-                    to={{
-                        pathname: '/notloggedin',
-                        state: { from: props.location }
-                    }}
-                />
-            )
-        }
-    />
+  <Route
+    {...rest}
+    render={props => context.auth.loggedIn
+      ? (<Component {...props} />)
+      : (<Redirect
+          to={{
+            pathname: '/not-logged-in',
+            state: { from: props.location }
+          }}
+        />)
+    }
+  />
 );
 
 PrivateRoute.contextTypes = {
-    auth: PropTypes.object
+  auth: PropTypes.object
 };
 
 export default PrivateRoute;
