@@ -1,0 +1,29 @@
+{
+    "name": "cypress-react-auth-app",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "run-p server client",
+        "server": "node server.js",
+        "client": "node client.js"
+    },
+    "author": "Thanh Van Vu",
+    "license": "ISC",
+    "dependencies": {
+        "basic-auth": "^2.0.1",
+        "cypress": "^8.3.0",
+        "express-jwt": "^6.1.0",
+        "json-server": "^0.16.3",
+        "jsonwebtoken": "^8.5.1",
+        "start-server-and-test": "^1.13.1"
+    },
+    "standard": {
+        "env": [
+            "node"
+        ]
+    },
+    "devDependencies": {
+        "npm-run-all": "^4.1.5"
+    }
+}
